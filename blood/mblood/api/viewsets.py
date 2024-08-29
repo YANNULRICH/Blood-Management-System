@@ -1,9 +1,10 @@
 from rest_framework import mixins, filters
-from blood.mblood.api.serializers import *
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
 from django_filters.rest_framework import DjangoFilterBackend
 
-from blood.mblood.models import Donor
+from blood.mblood.api.serializers import BloodBankSerializer, BloodDonationSerializer, BloodTypeSerializer, \
+    BloodBagSerializer, HospitalSerializer, UsersSerializer, CommandSerializer, DonorSerializer
+from blood.mblood.models import Donor, BloodBank, BloodDonation, BloodType, BloodBag, Hospital, Users, Command
 from blood.core.api.viewsets import BaseModelViewSet
 
 '''from django_filters.rest_framework import DjangoFilterBackend'''
@@ -14,17 +15,23 @@ class DonorViewSet(BaseModelViewSet, mixins.ListModelMixin,
                    mixins.UpdateModelMixin,
                    mixins.CreateModelMixin, ):
     queryset = Donor.objects.filter(is_active=True)
-    serializer_class = BloodBankSerializer
+    serializer_class = DonorSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
 
         "name": ['exact', 'contains'],
+        "sex": ['exact', 'contains'],
+        "phone_number": ['exact', 'contains'],
         "surname": ['exact', 'contains'],
-        "address": ['exact', 'contains'],
+        "date": ['exact', 'contains'],
+        "age": ['exact', 'contains'],
+        "email": ['exact', 'contains'],
+        "blood_group": ['exact', 'contains'],
+        "password": ['exact', 'contains']
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["name", "address"]
+    search_fields = ["name", "address", "phone_number", "surname", "date", "age", "email", "blood_group"]
     ordering_fields = ["surname", "name", "date"]
     order = ["surname", "name", "date"]
     ordering = ["surname", "name", "date"]
@@ -41,12 +48,13 @@ class BloodBankViewSet(BaseModelViewSet, mixins.ListModelMixin,
     filterset_field = {
 
         "blood_group": ['exact', 'contains'],
-        "quantity": ['exact', 'contains']
+        "quantity": ['exact', 'contains'],
+        "code": ['exact', 'contains']
     }
-    search_fields = ["blood_group", "quantity"]
-    ordering_fields = ["blood_group", "quantity"]
-    order = ["blood_group", "quantity"]
-    ordering = ["blood_group", "quantity"]
+    search_fields = ["blood_group", "quantity", "code"]
+    ordering_fields = ["blood_group", "quantity", "code"]
+    order = ["blood_group", "quantity", "code"]
+    ordering = ["blood_group", "quantity", "code"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 
@@ -60,17 +68,16 @@ class BloodDonationViewSet(BaseModelViewSet, mixins.ListModelMixin,
     filterset_field = {
 
         "quantity": ['exact', 'contains'],
-        "Expiration": ['exact', 'contains'],
+        "Expiration_date": ['exact', 'contains'],
         "donor": ['exact', 'contains'],
         "blood_bank": ['extract', 'contains']
-
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["quantity", "Expiration", "donor", "blood_bank"]
-    ordering_fields = ["quantity", "Expiration", "donor"]
-    order = ["quantity", "Expiration", "donor"]
-    ordering = ["quantity", "Expiration", "donor"]
+    search_fields = ["quantity", "Expiration_date", "donor", "blood_bank"]
+    ordering_fields = ["quantity", "Expiration_date", "donor"]
+    order = ["quantity", "Expiration_date", "donor"]
+    ordering = ["quantity", "Expiration_date", "donor"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 
@@ -83,16 +90,16 @@ class BloodTypeViewSet(BaseModelViewSet, mixins.ListModelMixin,
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
 
+        "code": ['exact', 'contains'],
         "quantity": ['exact', 'contains']
-
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
     '''
-    search_fields = ["quantity"]
-    ordering_fields = ["quantity"]
-    order = ["quantity"]
-    ordering = ["quantity"]
+    search_fields = ["quantity", "code"]
+    ordering_fields = ["code"]
+    order = ["code"]
+    ordering = ["code"]
     '''
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
@@ -107,15 +114,16 @@ class BloodBagViewSet(BaseModelViewSet, mixins.ListModelMixin,
     filterset_field = {
 
         "quantity": ['exact', 'contains'],
+        "code": ['exact', 'contains'],
         "blood_type": ['exact', 'contains'],
-        "blood_bank": ['exact', 'contains'],
+        "blood_bank": ['exact', 'contains']
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["quantity", "blood_type", "blood_bank"]
-    ordering_fields = ["quantity"]
-    order = ["quantity"]
-    ordering = ["quantity"]
+    search_fields = ["quantity", "blood_type", "blood_bank", "code"]
+    ordering_fields = ["quantity", "code"]
+    order = ["quantity", "code"]
+    ordering = ["quantity", "code"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 
@@ -155,12 +163,12 @@ class UsersViewSet(BaseModelViewSet, mixins.ListModelMixin,
         "sex": ['exact', 'contains'],
         "phone_number": ['exact', 'contains'],
         "email": ['exact', 'contains'],
+        # "password": ['exact', 'contains'],
         "hospital": ['exact', 'contains']
-
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["name", "surname", "email", "hospital"]
+    search_fields = ["name", "surname", "email", "hospital", "password"]
     ordering_fields = ["name", "surname", "sex", "phone_number", "email", "hospital"]
     order = ["name", "surname", "sex", "phone_number", "email", "hospital"]
     ordering = ["name", "surname", "sex", "phone_number", "email", "hospital"]
@@ -176,20 +184,16 @@ class CommandViewSet(BaseModelViewSet, mixins.ListModelMixin,
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
 
-        "name": ['exact', 'contains'],
-        "surname": ['exact', 'contains'],
-        "sex": ['exact', 'contains'],
-        "phone_number": ['exact', 'contains'],
-        "email": ['exact', 'contains'],
+        "command_number": ['exact', 'contains'],
+        "quantity": ['exact', 'contains'],
         "blood_type": ['exact', 'contains'],
-        "users": ['exact', 'contains']
-
-
+        "users": ['exact', 'contains'],
+        "code": ['exact', 'contains']
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["name", "surname", "sex", "phone_number", "email", "blood_type", "users"]
-    ordering_fields = ["name", "surname", "sex", "phone_number", "email", "blood_type", "users"]
-    order = ["name", "surname", "sex", "phone_number", "email", "blood_type", "users"]
-    ordering = ["name", "surname", "sex", "phone_number", "email", "blood_type", "users"]
+    search_fields = ["command_number", "quantity", "blood_type", "users", "code"]
+    ordering_fields = ["command_number", "quantity", "blood_type", "users"]
+    order = ["command_number", "quantity", "blood_type", "users"]
+    ordering = ["command_number", "quantity", "blood_type", "users"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]

@@ -49,7 +49,7 @@ LOCALE_PATHS = [str(BASE_DIR / "locale")]
 DATABASES = {
     "default": env.db(
         "DATABASE_URL",
-        default="postgres://postgres:hello123@localhost:5432/blood",
+        default="postgres://postgres:hello123@localhost:5432/bloodms",
     ),
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
