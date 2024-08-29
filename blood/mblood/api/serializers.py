@@ -1,35 +1,35 @@
-from blood.mblood.models import *
 from blood.core.api.serializers import BaseSerializer
+from blood.mblood.models import Donor, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, BloodBank
 
 
 class DonorSerializer(BaseSerializer):
     class Meta:
         model = Donor
-        fields = ("id", "name", "surname", "sex", "phone_number", "date", "email")
+        fields = ("id", "name", "surname", "sex", "age", "phone_number", "date", "email", "blood_group", "password")
 
 
 class BloodBankSerializer(BaseSerializer):
     class Meta:
         model = BloodBank
-        fields = ("id", "blood_group", "quantity")
+        fields = ("id", "blood_group", "quantity", "code")
 
 
 class BloodDonationSerializer(BaseSerializer):
     class Meta:
         model = BloodDonation
-        fields = ("id", "date", "quantity", "donor", "blood_bank")
+        fields = ("id", "Expiration_date", "quantity", "donor", "blood_bank")
 
 
 class BloodTypeSerializer(BaseSerializer):
     class Meta:
         model = BloodType
-        fields = ("id", "quantity")
+        fields = ("id", "code", "quantity")
 
 
 class BloodBagSerializer(BaseSerializer):
     class Meta:
         model = BloodBag
-        fields = ("id", "quantity", "blood_type", "blood_bank")
+        fields = ("id", "quantity", "blood_type", "blood_bank", "code")
 
 
 class HospitalSerializer(BaseSerializer):
@@ -41,10 +41,10 @@ class HospitalSerializer(BaseSerializer):
 class UsersSerializer(BaseSerializer):
     class Meta:
         model = Users
-        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital")
+        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital") #password
 
 
 class CommandSerializer(BaseSerializer):
     class Meta:
         model = Command
-        fields = ("id", "command_number", "quantity", "users", "blood_type")
+        fields = ("id", "command_number", "quantity", "users", "blood_type", "code")
