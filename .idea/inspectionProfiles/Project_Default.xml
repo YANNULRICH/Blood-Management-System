@@ -6,7 +6,10 @@
         <list>
           <option value="blood.blood.mblood.mblood" />
           <option value="blood.mblood" />
+<<<<<<< HEAD
           <option value="rsa_crypt_dcrypt.Crypto" />
+=======
+>>>>>>> 0adf6be89b69cacac1b39d067e6d8fd08fdf54ed
         </list>
       </option>
     </inspection_tool>
