@@ -1,6 +1,12 @@
+import uuid
+
 from django.db import models
+from django.db.models import Max
+from django.db.models.signals import post_save, pre_save
+from django.dispatch import receiver
 
 from blood.core.models import BaseModel
+from blood.utils.random import generate_unique_code
 
 
 class Donor(BaseModel):
@@ -22,14 +28,24 @@ class Donor(BaseModel):
 
 
 class BloodBank(BaseModel):
-    quantity = models.CharField(max_length=100, null=True)
     blood_group = models.CharField(max_length=100)
-    code = models.CharField(max_length=100, unique=True, default="A")
+    code = models.CharField(max_length=100, unique=True, blank=True)
+    name = models.CharField(max_length=100, default="A")
+
+
+'''
+@receiver(post_save, sender=BloodBank)
+def generate_code(sender, instance, created, **kwargs):
+    if created:
+        random_part = generate_random_code()
+        instance.code = f"blbk_{instance.name}_{random_part}"
+        instance.save()
+'''
 
 
 class BloodDonation(BaseModel):
     Expiration_date = models.DateTimeField(max_length=100, null=True)
-    quantity = models.CharField(max_length=100)
+    quantity = models.IntegerField()
     donor = models.ForeignKey(Donor,
                               on_delete=models.CASCADE,
                               null=False,
@@ -41,12 +57,11 @@ class BloodDonation(BaseModel):
 
 
 class BloodType(BaseModel):
-    quantity = models.CharField(max_length=100, null=True)
     code = models.CharField(max_length=100, unique=True, default="A")
 
 
 class BloodBag(BaseModel):
-    quantity = models.CharField(max_length=100)
+    quantity = models.IntegerField()
     code = models.CharField(max_length=100, default="A")
     blood_bank = models.ForeignKey(BloodBank,
                                    on_delete=models.CASCADE,
@@ -80,7 +95,7 @@ class Users(BaseModel):
 
 class Command(BaseModel):
     command_number = models.IntegerField(unique=True)
-    quantity = models.CharField(max_length=100)
+    quantity = models.IntegerField()
     code = models.CharField(max_length=100, default="A")
     users = models.ForeignKey(Users,
                               on_delete=models.CASCADE,
@@ -90,6 +105,15 @@ class Command(BaseModel):
                                    on_delete=models.CASCADE,
                                    null=False,
                                    related_name="blood_command")
+
+
+@receiver(post_save, sender=BloodBank)
+@receiver(post_save, sender=BloodBag)
+# @receiver(post_save, sender=Command)
+def generate_code(sender, instance, created, **kwargs):
+    if created:
+        instance.code = generate_unique_code(instance)
+        instance.save()
 
 
 '''

@@ -1,3 +1,5 @@
+from rest_framework import serializers
+
 from blood.core.api.serializers import BaseSerializer
 from blood.mblood.models import Donor, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, BloodBank
 
@@ -11,7 +13,7 @@ class DonorSerializer(BaseSerializer):
 class BloodBankSerializer(BaseSerializer):
     class Meta:
         model = BloodBank
-        fields = ("id", "blood_group", "quantity", "code")
+        fields = ("id", "blood_group", "code", "name")
 
 
 class BloodDonationSerializer(BaseSerializer):
@@ -23,7 +25,7 @@ class BloodDonationSerializer(BaseSerializer):
 class BloodTypeSerializer(BaseSerializer):
     class Meta:
         model = BloodType
-        fields = ("id", "code", "quantity")
+        fields = ("id", "code")
 
 
 class BloodBagSerializer(BaseSerializer):
@@ -41,7 +43,7 @@ class HospitalSerializer(BaseSerializer):
 class UsersSerializer(BaseSerializer):
     class Meta:
         model = Users
-        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital") #password
+        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital")  # password
 
 
 class CommandSerializer(BaseSerializer):

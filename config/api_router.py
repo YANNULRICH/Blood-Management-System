@@ -20,6 +20,7 @@ router.register("blood_bag", BloodBagViewSet)
 router.register("hospital", HospitalViewSet)
 router.register("users", UsersViewSet)
 router.register("Command", CommandViewSet)
+router.register(r'blood_bank', BloodBankViewSet, basename='blood_bank')
 
 
 app_name = "v1"
