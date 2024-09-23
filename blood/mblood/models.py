@@ -11,6 +11,8 @@ class Donor(BaseModel):
     phone_number = models.IntegerField()
     date = models.DateTimeField()
     email = models.EmailField(max_length=100, unique=True)
+    blood_group = models.CharField(max_length=100, unique=False)
+    password = models.CharField(max_length=100, unique=True)
 
     class Meta:
         ordering = ["name"]
@@ -19,9 +21,27 @@ class Donor(BaseModel):
         return f"{self.is_active}"
 
 
-class BloodBank(BaseModel):
+class Campaign(BaseModel):
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    email = models.EmailField(max_length=100, unique=True)
+
+
+class Affiliation(BaseModel):
     quantity = models.CharField(max_length=100, unique=False)
     blood_group = models.CharField(max_length=100, unique=False)
+
+
+class BloodBank(BaseModel):
+    campaign = models.ForeignKey(Campaign,
+                                 on_delete=models.CASCADE,
+                                 null=False,
+                                 related_name="blood_donation")
+    donor = models.ForeignKey(Donor,
+                              on_delete=models.CASCADE,
+                              null=False,
+                              related_name="blood_donation")
 
 
 class BloodDonation(BaseModel):
@@ -66,6 +86,7 @@ class Users(BaseModel):
     sex = models.CharField(max_length=100, unique=False)
     phone_number = models.IntegerField()
     email = models.EmailField(max_length=100, unique=True)
+    password = models.CharField(max_length=100, unique=True)
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
                                  null=False,
