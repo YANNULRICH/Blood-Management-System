@@ -52,6 +52,9 @@ def generate_unique_code(model_instance):
         return f"blbk_{unique_identifier}_{random_part[:3]}"
     elif model_name == "bloodbag":
         return f"blbg_{model_instance.quantity}_{random_part}"
+    elif model_name == "command":
+        return f"comd_{model_instance.command_number}_{model_instance.quantity}"
+
     '''
     elif model_name == "command":
 
@@ -66,6 +69,8 @@ def generate_unique_code(model_instance):
         number_str = str(sequence_number).zfill(1)
         return f"comd_{number_str}_{quantity}"
         '''
+
+
 '''
     elif model_name == "command":
         # Count the existing commands
@@ -86,3 +91,17 @@ def generate_unique_code(model_instance):
     else:
         raise ValueError("Unsupported model")
 '''
+
+def generate_code(command_number, autogen_number):
+    """Generates a code in the format comd_autogen_command_number.
+
+    Args:
+        command_number: The command number to include in the code.
+        autogen_number: The auto-generated number for the command.
+
+    Returns:
+        The generated code string.
+    """
+
+    return f"comd_{autogen_number}_{command_number}"
+

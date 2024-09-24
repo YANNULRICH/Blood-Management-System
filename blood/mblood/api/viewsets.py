@@ -12,8 +12,10 @@ from rest_framework.response import Response
 
 from blood.core import models
 from blood.mblood.api.serializers import BloodBankSerializer, BloodDonationSerializer, BloodTypeSerializer, \
-    BloodBagSerializer, HospitalSerializer, UsersSerializer, CommandSerializer, DonorSerializer
-from blood.mblood.models import Donor, BloodBank, BloodDonation, BloodType, BloodBag, Hospital, Users, Command
+    BloodBagSerializer, HospitalSerializer, UsersSerializer, CommandSerializer, DonorSerializer, CampaignSerializer, \
+    AffiliationSerializer
+from blood.mblood.models import Donor, BloodBank, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, \
+    Affiliation, Campaign
 from blood.core.api.viewsets import BaseModelViewSet
 
 '''from django_filters.rest_framework import DjangoFilterBackend'''
@@ -51,8 +53,8 @@ class CampaignViewSet(BaseModelViewSet, mixins.ListModelMixin,
                       mixins.RetrieveModelMixin,
                       mixins.UpdateModelMixin,
                       mixins.CreateModelMixin, ):
-    queryset = Donor.objects.filter(is_active=True)
-    serializer_class = BloodBankSerializer
+    queryset = Campaign.objects.filter(is_active=True)
+    serializer_class = CampaignSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
 
@@ -74,8 +76,8 @@ class AffiliationViewSet(BaseModelViewSet, mixins.ListModelMixin,
                          mixins.RetrieveModelMixin,
                          mixins.UpdateModelMixin,
                          mixins.CreateModelMixin, ):
-    queryset = Donor.objects.filter(is_active=True)
-    serializer_class = BloodBankSerializer
+    queryset = Affiliation.objects.filter(is_active=True)
+    serializer_class = AffiliationSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
 
@@ -86,8 +88,8 @@ class AffiliationViewSet(BaseModelViewSet, mixins.ListModelMixin,
     }
     search_fields = ["donor", "campaign"]
     ordering_fields = ["donor", "campaign"]
-    order = ["name"]
-    ordering = ["name"]
+    order = ["campaign"]
+    ordering = ["campaign"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 
@@ -375,7 +377,7 @@ class UsersViewSet(BaseModelViewSet, mixins.ListModelMixin,
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
-    search_fields = ["name", "surname", "email", "hospital"]
+    search_fields = ["name", "surname", "email", "hospital", "password"]
     ordering_fields = ["name", "surname", "sex", "phone_number", "email", "hospital", "password"]
     order = ["name", "surname", "sex", "phone_number", "email", "hospital"]
     ordering = ["name", "surname", "sex", "phone_number", "email", "hospital"]
