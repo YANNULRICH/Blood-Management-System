@@ -1,12 +1,11 @@
 import uuid
 
 from django.db import models
-from django.db.models import Max
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from blood.core.models import BaseModel
-from blood.utils.random import generate_unique_code
+from blood.utils.random import generate_unique_code, generate_code
 
 
 class Donor(BaseModel):
@@ -17,14 +16,32 @@ class Donor(BaseModel):
     phone_number = models.IntegerField(unique=True)
     date = models.DateTimeField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
-    blood_group = models.CharField(max_length=100, null=True)
-    password = models.CharField(max_length=100, unique=True, null=True)
+    blood_group = models.CharField(max_length=100, unique=False, default="")
+    password = models.CharField(max_length=100, unique=True, default="")
 
     class Meta:
         ordering = ["name"]
 
     def __str__(self):
         return f"{self.is_active}"
+
+
+class Campaign(BaseModel):
+    name = models.CharField(max_length=100)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    email = models.EmailField(max_length=100, unique=True)
+
+
+class Affiliation(BaseModel):
+    campaign = models.ForeignKey(Campaign,
+                                 on_delete=models.CASCADE,
+                                 null=False,
+                                 related_name="affiliation")
+    donor = models.ForeignKey(Donor,
+                              on_delete=models.CASCADE,
+                              null=False,
+                              related_name="affiliation")
 
 
 class BloodBank(BaseModel):
@@ -86,7 +103,7 @@ class Users(BaseModel):
     sex = models.CharField(max_length=100)
     phone_number = models.IntegerField(unique=True)
     email = models.EmailField(max_length=100, unique=True)
-    # password = models.CharField(max_length=128, unique=True)
+    password = models.CharField(max_length=100, unique=True, default="")
     hospital = models.ForeignKey(Hospital,
                                  on_delete=models.CASCADE,
                                  null=False,
@@ -96,7 +113,7 @@ class Users(BaseModel):
 class Command(BaseModel):
     command_number = models.IntegerField(unique=True)
     quantity = models.IntegerField()
-    code = models.CharField(max_length=100, default="A")
+    code = models.CharField(max_length=100, unique =True)
     users = models.ForeignKey(Users,
                               on_delete=models.CASCADE,
                               null=False,
@@ -109,7 +126,7 @@ class Command(BaseModel):
 
 @receiver(post_save, sender=BloodBank)
 @receiver(post_save, sender=BloodBag)
-# @receiver(post_save, sender=Command)
+@receiver(post_save, sender=Command)
 def generate_code(sender, instance, created, **kwargs):
     if created:
         instance.code = generate_unique_code(instance)

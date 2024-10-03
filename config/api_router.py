@@ -4,7 +4,7 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 from django.conf import settings
 
 from blood.mblood.api.viewsets import BloodBankViewSet, BloodTypeViewSet, BloodBagViewSet, BloodDonationViewSet, \
-    HospitalViewSet, UsersViewSet, CommandViewSet, DonorViewSet
+    HospitalViewSet, UsersViewSet, CommandViewSet, DonorViewSet, AffiliationViewSet, CampaignViewSet
 from blood.users.api.viewsets import TokenObtainPairView, TokenRefreshView
 
 if settings.DEBUG:
@@ -13,6 +13,8 @@ else:
     router = SimpleRouter()
 
 router.register("donor", DonorViewSet)
+router.register("Campaign", CampaignViewSet)
+router.register("Affiliation", AffiliationViewSet)
 router.register("blood_bank", BloodBankViewSet)
 router.register("blood_donation", BloodDonationViewSet)
 router.register("blood_type", BloodTypeViewSet)

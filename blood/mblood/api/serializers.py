@@ -1,13 +1,26 @@
 from rest_framework import serializers
 
 from blood.core.api.serializers import BaseSerializer
-from blood.mblood.models import Donor, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, BloodBank
+from blood.mblood.models import Donor, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, BloodBank, \
+    Campaign, Affiliation
 
 
 class DonorSerializer(BaseSerializer):
     class Meta:
         model = Donor
-        fields = ("id", "name", "surname", "sex", "age", "phone_number", "date", "email", "blood_group", "password")
+        fields = ("id", "name", "surname", "sex", "age", "phone_number", "date", "email", "password")
+
+
+class CampaignSerializer(BaseSerializer):
+    class Meta:
+        model = Campaign
+        fields = ("id", "name", "start_date", "end_date", "email")
+
+
+class AffiliationSerializer(BaseSerializer):
+    class Meta:
+        model = Affiliation
+        fields = ("id", "donor", "campaign")
 
 
 class BloodBankSerializer(BaseSerializer):
@@ -43,7 +56,7 @@ class HospitalSerializer(BaseSerializer):
 class UsersSerializer(BaseSerializer):
     class Meta:
         model = Users
-        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital")  # password
+        fields = ("id", "name", "surname", "sex", "phone_number", "email", "hospital", "password")
 
 
 class CommandSerializer(BaseSerializer):

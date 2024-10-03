@@ -12,8 +12,10 @@ from rest_framework.response import Response
 
 from blood.core import models
 from blood.mblood.api.serializers import BloodBankSerializer, BloodDonationSerializer, BloodTypeSerializer, \
-    BloodBagSerializer, HospitalSerializer, UsersSerializer, CommandSerializer, DonorSerializer
-from blood.mblood.models import Donor, BloodBank, BloodDonation, BloodType, BloodBag, Hospital, Users, Command
+    BloodBagSerializer, HospitalSerializer, UsersSerializer, CommandSerializer, DonorSerializer, CampaignSerializer, \
+    AffiliationSerializer
+from blood.mblood.models import Donor, BloodBank, BloodDonation, BloodType, BloodBag, Hospital, Users, Command, \
+    Affiliation, Campaign
 from blood.core.api.viewsets import BaseModelViewSet
 
 '''from django_filters.rest_framework import DjangoFilterBackend'''
@@ -44,6 +46,50 @@ class DonorViewSet(BaseModelViewSet, mixins.ListModelMixin,
     ordering_fields = ["surname", "name", "date"]
     order = ["surname", "name", "date"]
     ordering = ["surname", "name", "date"]
+    parser_classes = [FormParser, MultiPartParser, JSONParser]
+
+
+class CampaignViewSet(BaseModelViewSet, mixins.ListModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin,
+                      mixins.CreateModelMixin, ):
+    queryset = Campaign.objects.filter(is_active=True)
+    serializer_class = CampaignSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_field = {
+
+        "name": ['exact', 'contains'],
+        "start_date": ['exact', 'contains'],
+        "end_date": ['exact', 'contains'],
+        "email": ['exact', 'contains']
+        # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
+        # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
+    }
+    search_fields = ["name", "start_date", "end_date", "email"]
+    ordering_fields = ["name", "start_date", "end_date", "email"]
+    order = ["name"]
+    ordering = ["name"]
+    parser_classes = [FormParser, MultiPartParser, JSONParser]
+
+
+class AffiliationViewSet(BaseModelViewSet, mixins.ListModelMixin,
+                         mixins.RetrieveModelMixin,
+                         mixins.UpdateModelMixin,
+                         mixins.CreateModelMixin, ):
+    queryset = Affiliation.objects.filter(is_active=True)
+    serializer_class = AffiliationSerializer
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
+    filterset_field = {
+
+        "donor": ['exact', 'contains'],
+        "campaign": ['exact', 'contains'],
+        # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
+        # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
+    }
+    search_fields = ["donor", "campaign"]
+    ordering_fields = ["donor", "campaign"]
+    order = ["campaign"]
+    ordering = ["campaign"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 
@@ -325,13 +371,14 @@ class UsersViewSet(BaseModelViewSet, mixins.ListModelMixin,
         "sex": ['exact', 'contains'],
         "phone_number": ['exact', 'contains'],
         "email": ['exact', 'contains'],
-        # "password": ['exact', 'contains'],
-        "hospital": ['exact', 'contains']
+        "hospital": ['exact', 'contains'],
+        "password": ['exact', 'contains']
+
         # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
         # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
     }
     search_fields = ["name", "surname", "email", "hospital", "password"]
-    ordering_fields = ["name", "surname", "sex", "phone_number", "email", "hospital"]
+    ordering_fields = ["name", "surname", "sex", "phone_number", "email", "hospital", "password"]
     order = ["name", "surname", "sex", "phone_number", "email", "hospital"]
     ordering = ["name", "surname", "sex", "phone_number", "email", "hospital"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
