@@ -92,6 +92,7 @@ class BloodBag(BaseModel):
 
 
 class Hospital(BaseModel):
+    name = models.CharField(max_length=250, null=True)
     address = models.CharField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
     phone_number = models.IntegerField(unique=True)
