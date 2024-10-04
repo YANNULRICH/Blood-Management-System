@@ -50,7 +50,7 @@ class BloodBagSerializer(BaseSerializer):
 class HospitalSerializer(BaseSerializer):
     class Meta:
         model = Hospital
-        fields = ("id", "address", "email", "phone_number")
+        fields = ("id", "name","address", "email", "phone_number")
 
 
 class UsersSerializer(BaseSerializer):

@@ -133,7 +133,7 @@ class User(AbstractUser, BaseModel):
 
     phone_number = models.CharField(_("phone_number"), max_length=20, null=True, blank=True)
     first_name = models.CharField(_("first_name"), max_length=50, null=True, blank=True)
-    last_name = models.CharField(_("first_name"), max_length=50, null=True, blank=True)
+    last_name = models.CharField(_("last_name"), max_length=50, null=True, blank=True)
     gender = models.CharField(_("gender"), max_length=10, choices=Sex, default="M")
     user_code = models.CharField(_("user_code"), max_length=5, null=False, blank=False, default="1234")
     profile_picture_file = models.FileField(

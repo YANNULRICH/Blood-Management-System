@@ -343,7 +343,7 @@ class HospitalViewSet(BaseModelViewSet, mixins.ListModelMixin,
     serializer_class = HospitalSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_field = {
-
+        "name": ['exact', 'contains'],
         "address": ['exact', 'contains'],
         "email": ['exact', 'contains'],
         "phone_number": ['exact', 'contains']
