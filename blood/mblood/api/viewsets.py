@@ -3,7 +3,7 @@ from collections import Counter
 from django.db import OperationalError
 from django.db.models import Count, Sum
 from django.http import JsonResponse
-from rest_framework import mixins, filters, status, response
+from rest_framework import mixins, filters, status, response, viewsets
 from rest_framework.decorators import action, api_view
 from rest_framework.generics import get_object_or_404
 from rest_framework.parsers import MultiPartParser, JSONParser, FormParser
@@ -21,31 +21,32 @@ from blood.core.api.viewsets import BaseModelViewSet
 '''from django_filters.rest_framework import DjangoFilterBackend'''
 
 
-class DonorViewSet(BaseModelViewSet, mixins.ListModelMixin,
-                   mixins.RetrieveModelMixin,
-                   mixins.UpdateModelMixin,
-                   mixins.CreateModelMixin, ):
+class DonorViewSet(BaseModelViewSet,
+            viewsets.GenericViewSet,
+               mixins.ListModelMixin,
+               mixins.RetrieveModelMixin,
+               mixins.UpdateModelMixin,
+               mixins.CreateModelMixin, ):
     queryset = Donor.objects.filter(is_active=True)
     serializer_class = DonorSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
-    filterset_field = {
+    filterset_fields = {
 
         "name": ['exact', 'contains'],
         "sex": ['exact', 'contains'],
         "phone_number": ['exact', 'contains'],
         "surname": ['exact', 'contains'],
-        "date": ['exact', 'contains'],
         "age": ['exact', 'contains'],
         "email": ['exact', 'contains'],
         "blood_group": ['exact', 'contains'],
-        "password": ['exact', 'contains']
-        # "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
-        # "created_at": ['gte', 'lte', 'exact', 'gt', 'lt']
+        "updated_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
+        "created_at": ['gte', 'lte', 'exact', 'gt', 'lt'],
+        "last_donation_date": ['exact', 'gte', 'lte'],
     }
-    search_fields = ["name", "address", "phone_number", "surname", "date", "age", "email", "blood_group"]
-    ordering_fields = ["surname", "name", "date"]
-    order = ["surname", "name", "date"]
-    ordering = ["surname", "name", "date"]
+    search_fields = ["name", "address", "phone_number", "surname", "age", "email", "blood_group"]
+    ordering_fields = ["surname", "name"]
+    order = ["surname", "name"]
+    ordering = ["surname", "name"]
     parser_classes = [FormParser, MultiPartParser, JSONParser]
 
 

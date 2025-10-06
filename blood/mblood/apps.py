@@ -7,3 +7,5 @@ class MBloodConfig(AppConfig):
     name = "blood.mblood"
     verbose_name = _("mblood")
 
+    def ready(self):
+        import blood.mblood.signals

@@ -1,4 +1,5 @@
 import uuid
+from django.utils import timezone
 
 from django.db import models
 from django.db.models.signals import post_save, pre_save
@@ -14,10 +15,10 @@ class Donor(BaseModel):
     sex = models.CharField(max_length=100)
     age = models.IntegerField()
     phone_number = models.IntegerField(unique=True)
-    date = models.DateTimeField(max_length=100)
     email = models.EmailField(max_length=100, unique=True)
     blood_group = models.CharField(max_length=100, unique=False, default="")
-    password = models.CharField(max_length=100, unique=True, default="")
+    password = models.CharField(max_length=100, default="")
+    last_donation_date = models.DateField(null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -114,7 +115,7 @@ class Users(BaseModel):
 class Command(BaseModel):
     command_number = models.IntegerField(unique=True)
     quantity = models.IntegerField()
-    code = models.CharField(max_length=100, unique =True)
+    code = models.CharField(max_length=100, unique=True)
     users = models.ForeignKey(Users,
                               on_delete=models.CASCADE,
                               null=False,

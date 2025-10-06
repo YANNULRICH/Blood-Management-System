@@ -92,7 +92,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     "blood.users",
-    # Your stuff: custom apps go here
     "blood.core",
     "blood.mblood"
 ]
@@ -331,7 +330,7 @@ CORS_URLS_REGEX = r"^/api/.*$"
 # By Default swagger ui is available only to admin user(s). You can change permission classes to change that
 # See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
 SPECTACULAR_SETTINGS = {
-    "TITLE": "yann API",
+    "TITLE": "Blood API",
     "DESCRIPTION": "Documentation of API endpoints of yann",
     "VERSION": "1.0.0",
     "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
