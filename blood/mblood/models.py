@@ -32,6 +32,7 @@ class Campaign(BaseModel):
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     email = models.EmailField(max_length=100, unique=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
 
 
 class Affiliation(BaseModel):
