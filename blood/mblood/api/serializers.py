@@ -15,7 +15,7 @@ class DonorSerializer(BaseSerializer):
 class CampaignSerializer(BaseSerializer):
     class Meta:
         model = Campaign
-        fields = ("id", "name", "start_date", "end_date", "email")
+        fields = ("id", "name", "start_date", "end_date", "email", "location")
 
 
 class AffiliationSerializer(BaseSerializer):
@@ -31,9 +31,21 @@ class BloodBankSerializer(BaseSerializer):
 
 
 class BloodDonationSerializer(BaseSerializer):
+    donor = DonorSerializer(read_only=True)
+    blood_bank = BloodBankSerializer(read_only=True)
+    donor_id = serializers.PrimaryKeyRelatedField(
+        queryset=Donor.objects.all(),
+        source='donor',
+        write_only=True
+    )
+    blood_bank_id = serializers.PrimaryKeyRelatedField(
+        queryset = BloodBank.objects.all(),
+        source='blood_bank',
+        write_only=True
+    )
     class Meta:
         model = BloodDonation
-        fields = ("id", "Expiration_date", "quantity", "donor", "blood_bank")
+        fields = ("id", "Expiration_date", "quantity", "donor", "blood_bank", "donor_id", "blood_bank_id")
 
 
 class BloodTypeSerializer(BaseSerializer):
@@ -43,15 +55,28 @@ class BloodTypeSerializer(BaseSerializer):
 
 
 class BloodBagSerializer(BaseSerializer):
+    blood_bank = BloodBankSerializer(read_only=True)
+    blood_type = BloodTypeSerializer(read_only=True)
+    blood_bank_id = serializers.PrimaryKeyRelatedField(
+        queryset=BloodBank.objects.all(),
+        source='blood_bank',
+        write_only=True
+    )
+    blood_type_id = serializers.PrimaryKeyRelatedField(
+        queryset=BloodType.objects.all(),
+        source='blood_type',
+        write_only=True
+    )
+
     class Meta:
         model = BloodBag
-        fields = ("id", "quantity", "blood_type", "blood_bank", "code")
+        fields = ("id", "quantity", "blood_type", "blood_bank", "code", "blood_bank_id", "blood_type_id")
 
 
 class HospitalSerializer(BaseSerializer):
     class Meta:
         model = Hospital
-        fields = ("id", "name","address", "email", "phone_number")
+        fields = ("id", "name", "address", "email", "phone_number")
 
 
 class UsersSerializer(BaseSerializer):
