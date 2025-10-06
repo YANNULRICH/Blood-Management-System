@@ -8,7 +8,8 @@ from blood.mblood.models import Donor, BloodDonation, BloodType, BloodBag, Hospi
 class DonorSerializer(BaseSerializer):
     class Meta:
         model = Donor
-        fields = ("id", "name", "surname", "sex", "age", "phone_number", "date", "email", "password")
+        fields = ("id", "name", "surname", "sex", "age", "phone_number", "blood_group", "email", "password",
+                  "last_donation_date")
 
 
 class CampaignSerializer(BaseSerializer):
